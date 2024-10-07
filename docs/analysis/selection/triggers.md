@@ -108,13 +108,13 @@ On all CMS Open Data portal records for data samples, the list of trigger paths 
 
     class MiniAODTriggerAnalyzer : public edm::EDAnalyzer {
         public:
-      	    explicit MiniAODTriggerAnalyzer (const edm::ParameterSet&);
-	    ~MiniAODTriggerAnalyzer() {}
+            explicit MiniAODTriggerAnalyzer (const edm::ParameterSet&);
+            ~MiniAODTriggerAnalyzer() {}
 
-   	private:
-      	    virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+        private:
+            virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
 
-      	edm::EDGetTokenT triggerBits_;
+        edm::EDGetTokenT triggerBits_;
     };
 
     MiniAODTriggerAnalyzer::MiniAODTriggerAnalyzer(const edm::ParameterSet& iConfig):
