@@ -4,7 +4,7 @@ Many of the most important kinematic quantities defining a physics object are ac
 
 ## 4-vector access functions
 
-=== "Run 1 Data"
+=== "Run 1 Data (AOD files)"
 
     In [MuonAnalyzer.cc](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/blob/2012/PhysObjectExtractor/src/MuonAnalyzer.cc), the muon four-vector elements are accessed as shown below. In this example, the values for each muon are stored into an array, which will become a branch in a ROOT TTree.
 
@@ -33,7 +33,7 @@ Many of the most important kinematic quantities defining a physics object are ac
 
     The same type of kinematic member functions are used in all the different analyzers in the [src/ directory of the POET example code](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/tree/2012/PhysObjectExtractor/src). These and other basic kinematic methods are defined in the [LeafCandidate class](https://github.com/cms-sw/cmssw/blob/CMSSW_5_3_X/DataFormats/Candidate/interface/LeafCandidate.h) of the CMSSW DataFormats package (rendered for maybe easier readability in the [CMSSW software documentation](https://cmsdoxygen.web.cern.ch/cmsdoxygen/CMSSW_5_3_30/doc/html/dc/d78/classreco_1_1LeafCandidate.html)).
 
-=== "Run 2 Data"
+=== "Run 2 Data (MiniAOD files)"
 
     In [MuonAnalyzer.cc](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/blob/2015MiniAOD/PhysObjectExtractor/src/MuonAnalyzer.cc), the muon four-vector elements are accessed as shown below. In this example, the values for each muon are stored into an array, which will become a branch in a ROOT TTree.
 
@@ -42,7 +42,7 @@ Many of the most important kinematic quantities defining a physics object are ac
     iEvent.getByToken(muonToken_, muons);
 
     [...]
-    
+
     for (const pat::Muon &mu : *muons)
     {
       muon_e.push_back(mu.energy());
@@ -60,12 +60,24 @@ Many of the most important kinematic quantities defining a physics object are ac
 
     The same type of kinematic member functions are used in all the different analyzers in the [src/ directory of the POET example code](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/tree/2015MiniAOD/PhysObjectExtractor/src). These and other basic kinematic methods are defined in the [LeafCandidate class](https://github.com/cms-sw/cmssw/blob/CMSSW_7_6_7/DataFormats/Candidate/interface/LeafCandidate.h) of the CMSSW DataFormats package (rendered for maybe easier readability in the [CMSSW software documentation](https://cmsdoxygen.web.cern.ch/cmsdoxygen/CMSSW_7_6_7/doc/html/dc/d78/classreco_1_1LeafCandidate.html)).
 
+=== "Run 2 Data (NanoAOD files)"
+
+    In NanoAOD, branches representing an object's four-vector are:
+
+    - `OBJECT_pt`
+    - `OBJECT_eta`
+    - `OBJECT_phi`
+    - `OBJECT_mass`
+
+    Here, `OBJECT` can be `Muon`, `Electron`, `Jet`, etc.
+
+
 ## Track access functions
 
 Many objects are also connected to tracks from the CMS tracking detectors. Information from
 tracks provides other kinematic quantities that are common to multiple types of objects.
 
-=== "Run 1 Data"
+=== "Run 1 Data (AOD files)"
 
     From a muon object, we can access the associated track while looping over muons via the `globalTrack` method:
 
@@ -107,7 +119,7 @@ tracks provides other kinematic quantities that are common to multiple types of 
     auto trk = it->gsfTrack(); // electron track
     ```
 
-=== "Run 2 Data"
+=== "Run 2 Data (MiniAOD files)"
 
     From a muon object, we can access the associated track while looping over muons via the `muonBestTrack` method.
 
@@ -135,13 +147,26 @@ tracks provides other kinematic quantities that are common to multiple types of 
 
     Note that the tracking method depends on the object, the electron tracks are found using the Gaussian-sum filter method `gsfTrack`.
 
+=== "Run 2 Data (NanoAOD files)"
+
+    In NanoAOD, the track object cannot be access directly. But often, the most pertinent information about an object (such as a muon) to access from its associated track is its **impact parameter** with respect to the primary interaction vertex. Since muons can also be tracked through the muon detectors, we first check if the track is well-defined, and then access impact parameters in the xy-plane (`dxy` or `d0`) and along the beam axis (`dz`), as well as their respective uncertainties. In NanoAOD files, branches representing track impact parameters are:
+
+    - `OBJECT_dxy`
+    - `OBJECT_dxyErr`
+    - `OBJECT_dz`
+    - `OBJECT_dzErr`
+    - `OBJECT_ip3d`
+    - `OBJECT_sip3d`
+
+    Here, `OBJECT` can be `Muon`, `Electon`, `Tau`, etc, though only `Muon` and `Electron` collections have 3D impact parameter information. 
+
 ## Matching to generated particles
 
 Simulated files also contain information about the generator-level particles that
 were propagated into the showering and detector simulations. Physics objects can
 be matched to these generated particles spatially.
 
-=== "Run 1 Data"
+=== "Run 1 Data (AOD files)"
 
     The [AOD2NanoAOD tool](https://github.com/cms-opendata-analyses/AOD2NanoAODOutreachTool/tree/2012) is an example code extracting objects from AOD file and storing them in an output file. In its [analyzer code](https://github.com/cms-opendata-analyses/AOD2NanoAODOutreachTool/blob/2012/src/AOD2NanoAOD.cc), it sets up several utility functions for matching: `findBestMatch`,
     `findBestVisibleMatch`, and `subtractInvisible`. The `findBestMatch` function takes
@@ -181,7 +206,7 @@ be matched to these generated particles spatially.
     ``` cpp
     if (!isData){
       value_gen_n = 0;
-      
+
       for (auto p = selectedMuons.begin(); p != selectedMuons.end(); p++) {
 
           // get the muon's 4-vector
@@ -212,48 +237,15 @@ be matched to these generated particles spatially.
     }
     ```
 
-=== "Run 2 Data"
+=== "Run 2 Data (MiniAOD files)"
 
-    !!! Note "To do"
-        This will refer to Run 2 MiniAOD branch of AOD2NanoAODOutreachTool once available
-<!-- ## Challenge: electron matching
+    In MiniAOD files, physics objects can be matched to generated particles following the same type of code example provided for Run 1 Data. In the configuration file for the `EDAnalyzer` that will perform matching, the relevant MiniAOD collection names should be provided, and the `EDAnalyzer` should use MiniAOD C++ types for the collections. But from that point the Run 1 example of performing spatial matching can also apply to MiniAOD. Examples of correct MiniAOD analyzer setup for generated particles and the reconstructed physics objects can be found in the [POET 2015 repository](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/tree/2015MiniAOD/PhysObjectExtractor/src).
 
-Match selected electrons to the interesting generated particles.
-Compile your code and run over the simulation test file. Using the
-ROOT TBrowser, look at some histograms of the branches you've added to the tree throughout this
-episode.
+=== "Run 2 Data (NanoAOD files)"
 
-``` console
-$ scram b
-$ cmsRun configs/simulation_cfg.py
-$ root -l output.root
-[0] TBrowser b
-```
+    In NanoAOD simulations, objects can be matched spatially to the contents of the `GenPart_*` branch collection that provides four-vector and particle ID information for all generated particles in the event. See the "Run 1 Data" tab for an example of performing spatial matching by comparing four-vectors. Some objects also have NanoAOD branches that provide the index of the matched generated particle in the `GenPart` arrays. For example, the `Muon` branch collection contains:
 
-## Solution
+    - `Muon_genPartFlav`, a flag that shows how each muon was matched (to a prompt muon, a muon from a tau lepton, b quark, or c quark, etc.)
+    - `Muon_genPartIdx`, an integer that locates each muon's matched generated particle within the `GenPart` arrays. A value of -1 would indicate that a muon was unmatched.
 
-The structure for this matching exercise is identical to the muon matching segment. Loop over selected electrons, use the findBestVisibleMatch function to match it to an "interesting" particle and then to a jet.
-
-``` cpp
->>// Match electrons with gen particles and jets
->>for (auto p = selectedElectrons.begin(); p != selectedElectrons.end(); p++) {
->>  // Gen particle matching
->>  auto p4 = p->p4();
->>  auto idx = findBestVisibleMatch(interestingGenParticles, p4);
->>  if (idx != -1) {
->>    auto g = interestingGenParticles.begin() + idx;
->>    value_gen_pt[value_gen_n] = g->pt();
->>    value_gen_eta[value_gen_n] = g->eta();
->>    value_gen_phi[value_gen_n] = g->phi();
->>    value_gen_mass[value_gen_n] = g->mass();
->>    value_gen_pdgid[value_gen_n] = g->pdgId();
->>    value_gen_status[value_gen_n] = g->status();
->>    value_el_genpartidx[p - selectedElectrons.begin()] = value_gen_n;
->>    value_gen_n++;
->>  }
->>
->>  // Jet matching
->>  value_el_jetidx[p - selectedElectrons.begin()] = findBestMatch(selectedJets, p4);
->>}
-
-``` -->
+    All of the NanoAOD lepton collections have branches connecting the lepton to the generated particle list.

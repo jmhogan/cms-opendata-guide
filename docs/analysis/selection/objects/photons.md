@@ -6,7 +6,7 @@ Photons are measured in the CMS experiment in the [electromagnetic calorimeter](
 
 ## Photon 4-vector information
 
-=== "Run 1 Data"
+=== "Run 1 Data (AOD files)"
 
     An example of an EDAnalyzer accessing photon information is available in the [PhotonAnalyzer](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/blob/2012/PhysObjectExtractor/src/PhotonAnalyzer.cc) of the Physics Object Extractor Tool (POET). The following header files needed for accessing electron information are included:
 
@@ -44,7 +44,7 @@ Photons are measured in the CMS experiment in the [electromagnetic calorimeter](
     }
     ```
 
-=== "Run 2 Data"
+=== "Run 2 Data (MiniAOD files)"
 
     An example of an EDAnalyzer accessing electron information is available in the [PhotonAnalyzer](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/blob/2015MiniAOD/PhysObjectExtractor/src/PhotonAnalyzer.cc) of the Physics Object Extractor Tool (POET). The following header file needed for accessing photon information is included:
 
@@ -77,11 +77,16 @@ Photons are measured in the CMS experiment in the [electromagnetic calorimeter](
 
     with `photonToken_` defined as a member of the `PhotonAnalyzer` class and its value read from the [configuration file](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/blob/2015MiniAOD/PhysObjectExtractor/python/poet_cfg.py).
 
+=== "Run 2 Data (NanoAOD files)"
+
+    In NanoAOD, the photon four-vector information is stored in branches called: `Photon_pt`, `Photon_eta`, and `Photon_phi`, with the mass assumed to be zero.
+
+
 ## Photon identification
 
 As explained in the [Physics Object page](../objects#detector-information-for-identification), a mandatory task in the physics analysis is to identify photons, i.e. to separate “real” objects from “fakes”. A large fraction of the energy deposited in the detector by all proton-proton interactions arises from photons originating in the decay of neutral mesons, and these electromagnetic showers provide a substantial background to signal photons. The identification criteria depend on the type of analysis.
 
-=== "Run 1 Data"
+=== "Run 1 Data (AOD files)"
 
     The standard identification and isolation algorithm results can be accessed from the [photon object class](https://cmsdoxygen.web.cern.ch/cmsdoxygen/CMSSW_5_3_30/doc/html/d5/d35/classreco_1_1Photon.html) and the recommended working points for 2012 are implemented in the example code [PhotonAnalyzer.cc](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/blob/2012/PhysObjectExtractor/src/PhotonAnalyzer.cc).
 
@@ -95,17 +100,17 @@ As explained in the [Physics Object page](../objects#detector-information-for-id
 
     ``` cpp
     if ( itphoton->eta() <= 1.479 ){
-      if ( ph_hOverEm<.05 && ph_sigIetaIeta<.012 && 
-          corrPFCHIso<2.6 && corrPFNHIso<(3.5+.04*itphoton->pt()) && 
+      if ( ph_hOverEm<.05 && ph_sigIetaIeta<.012 &&
+          corrPFCHIso<2.6 && corrPFNHIso<(3.5+.04*itphoton->pt()) &&
           corrPFPhIso<(1.3+.005*itphoton->pt()) && passelectronveto==true) {
         isLoose = true;
 
-        if ( ph_sigIetaIeta<.011 && corrPFCHIso<1.5 
-            && corrPFNHIso<(1.0+.04*itphoton->pt()) 
+        if ( ph_sigIetaIeta<.011 && corrPFCHIso<1.5
+            && corrPFNHIso<(1.0+.04*itphoton->pt())
             && corrPFPhIso<(.7+.005*itphoton->pt())){
           isMedium = true;
 
-          if ( corrPFCHIso<.7 && corrPFNHIso<(.4+.04*itphoton->pt()) 
+          if ( corrPFCHIso<.7 && corrPFNHIso<(.4+.04*itphoton->pt())
               && corrPFPhIso<(.5+0.005*itphoton->pt()) ){
             isTight = true;
           }
@@ -121,7 +126,7 @@ As explained in the [Physics Object page](../objects#detector-information-for-id
     - The electron veto `passelectronveto` is obtained from an algorithm that indicates if photons have been identified also as electrons.
     - `corr...Iso` variables represent different isolation properties of the photon.
 
-    The isolation variables are defined with the `PFIsolationEstimator` class in the default cone size of 0.3 with
+    Isolation represents how much energy, relative to the photon's, within a cone around the electron comes from other particle-flow candidates. If this value is small the photon is likely "isolated" in the local region. The isolation variables are defined with the `PFIsolationEstimator` class in the default cone size of 0.3 with:
 
     ``` cpp
     PFIsolationEstimator isolator;
@@ -130,33 +135,27 @@ As explained in the [Physics Object page](../objects#detector-information-for-id
     const reco::VertexRef vertex(vertices, 0);
     const reco::Photon &thephoton = *itphoton;
     isolator.fGetIsolation(&thephoton, pfCands.product(), vertex, vertices);
-    double corrPFCHIso = 
+    double corrPFCHIso =
       std::max(isolator.getIsolationCharged() - rhoIso * aEff.CH_AEff, 0.)/itphoton->pt();
-    double corrPFNHIso = 
+    double corrPFNHIso =
       std::max(isolator.getIsolationNeutral() - rhoIso * aEff.NH_AEff, 0.)/itphoton->pt();
-    double corrPFPhIso = 
+    double corrPFPhIso =
       std::max(isolator.getIsolationPhoton() - rhoIso * aEff.Ph_AEff, 0.)/itphoton->pt();
     ```
 
     In the endcap part of the electromagnetic calorimeter, the procedure is similar with different values.
 
-    !!! Note "To do"
-        - The isolation snippet needs more explanation
-
-=== "Run 2 Data"
+=== "Run 2 Data (MiniAOD files)"
 
     The standard identification and isolation algorithm results can be accessed from the [pat photon object class](https://cmsdoxygen.web.cern.ch/cmsdoxygen/CMSSW_7_6_7/doc/html/d4/d47/classpat_1_1Photon.html). Three levels of identification criteria are defined: loose, medium, and tight. An example selection is implemented in [PhotonAnalyzer.cc](https://github.com/cms-opendata-analyses/PhysObjectExtractorTool/blob/2015MiniAOD/PhysObjectExtractor/src/PhotonAnalyzer.cc):
 
     ``` cpp
-      photon_isLoose.push_back(pho.photonID("cutBasedPhotonID-PHYS14-PU20bx25-V2p1-standalone-loose"));
-      photon_isMedium.push_back(pho.photonID("cutBasedPhotonID-PHYS14-PU20bx25-V2p1-standalone-medium"));
-      photon_isTight.push_back(pho.photonID("cutBasedPhotonID-PHYS14-PU20bx25-V2p1-standalone-tight"));
+      photon_isLoose.push_back(pho.photonID("cutBasedPhotonID-Spring15-25ns-V1-standalone-loose"));
+      photon_isMedium.push_back(pho.photonID("cutBasedPhotonID-Spring15-25ns-V1-standalone-medium"));
+      photon_isTight.push_back(pho.photonID("cutBasedPhotonID-Spring15-25ns-V1-standalone-tight"));
     ```
 
-    !!! Warning
-        The choice of recommended photon ID criteria for 2015 data needs to be verified. In addition to `PHYS14_PU20bx25_V2` other sets, for example `Spring15_25ns_V1`, are available.
-
-    Several isolation methods are available through the class member methods, for example:
+    Isolation represents how much energy, relative to the photon's, within a cone around the electron comes from other particle-flow candidates. If this value is small the photon is likely "isolated" in the local region. Several isolation methods are available through the class member methods, for example:
 
     ``` cpp
       photon_chIso.push_back(pho.chargedHadronIso());
@@ -165,7 +164,13 @@ As explained in the [Physics Object page](../objects#detector-information-for-id
     ```
 
     !!! Note "To do"
-        - Verify the recommended isolation, many other are available in the [photon class](https://github.com/cms-sw/cmssw/blob/CMSSW_7_6_X/DataFormats/PatCandidates/interface/Photon.h)
+        - Update the POET 2015MiniAOD photon analyzer to contain the proper PF isolation calculation.
 
-!!! Note "To do"
-    Add a mention on photon conversions both for Run 1 and Run 2
+=== "Run 2 Data (NanoAOD files)"
+
+    NanoAOD files contain the recommended identification algorithm working points (a "cut-based" algorithm with four quality levels, and an MVA-based algorithm with two prompt-photon efficiency working points), and two isolation variables. Isolation represents how much energy, relative to the photon's, within a cone around the electron comes from other particle-flow candidates. If this value is small the photon is likely "isolated" in the local region. See the [2024 Open Data Workshop lesson on photons](https://cms-opendata-workshop.github.io/workshop2024-lesson-physics-objects/instructor/02-electrons.html#photons) for more details on the branch contents.
+
+    - `Photon_cutBased` has different numerical values for which levels of the cut-based identification algorithms the photon passes.
+    - `Photon_mvAID_WP80` (or `WP90`) provide pass/fail information for the MVA-based identification algorithm.
+    - `Photon_pfRelIso03_all` provides the total particle-flow isolation, corrected for pileup.
+    - `Photon_pfRelIso03_chg` provides the charged component of the particle-flow isolation.
