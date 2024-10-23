@@ -71,8 +71,6 @@ The code examples to which this guide mainly refers to are:
 
     In NanoAOD, physics object *collections* are identified within the "Events" TTree by the first segment of their name. For example, all information taken from the `slimmedMuons` collection in MiniAOD shares `Muon_` at the beginning of the branch name: `Muon_pt`, `Muon_eta`, etc. Basic information about the contents of NanoAOD files can be found in the [NanoAOD WorkBook page](https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookNanoAOD), and each Open Data record contains a link to the branch list for that dataset. For the 2016 dataset called ["JetHT"](https://opendata.cern.ch/record/30558), the variable list is found under the heading "Dataset semantics": [variable list](https://opendata.cern.ch/eos/opendata/cms/dataset-semantics/NanoAOD/30558/JetHT_doc.html). The variable list contains the C++ type of each branch.
 
-
-
 ## Access methods
 
 In the [Event methods for data access](https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideEDMGetDataFromEvent#Event_methods_for_data_access) section of the *Getting Data From an Event* Twiki page, one can find a complete description of the different methods available for *Event* data access in AOD or MiniAOD files.

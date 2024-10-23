@@ -83,60 +83,11 @@ The [Physics Objects page](./objects.md) shows how to access muon collections, a
 
     As explained in the [Physics Object page](./objects#detector-information-for-identification), a mandatory task in the physics analysis is to identify muons, i.e. to separate “real” objects from “fakes”. The criteria depend on the type of analysis. Muon NanoAOD branches can be used to select muons with various quality levels. Analysts must also consider how "isolated" they desire muons to be. For instance, an isolated muon might be produced in the decay of a W boson, while a non-isolated muon can come from a weak decay inside a jet or from a very high-momentum physics process that is likely to produce muons near a quark. Muon isolation is calculated from a combination of factors: energy from charged hadrons, energy from neutral hadrons, and energy from photons, and the typical energy deposits from pileup interactions. The [2024 Open Data Workshop lesson on muons](https://cms-opendata-workshop.github.io/workshop2024-lesson-physics-objects/instructor/03-muons.html) details many of the relevant NanoAOD branches for muon selection. More details on the muon identification can be found in the [CMS SWGuide MuonID page](https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideMuonIdRun2).
 
-## Further muon corrections
+## Muon momentum scale corrections
 
 There are misalignments in the CMS detector that make the reconstruction of muon momentum biased. The CMS reconstruction software does not fully correct these misalignments and additional corrections are needed to remove the bias. Correcting the misalignments is important when precision measurements are done using the muon momentum, because the bias in muon momentum will affect the results. However, if the measurement is not sensitive to the exact muon momentum, applying these corrections is not necessary.
 
-### The Muon Momentum Scale Corrections
+The muon momentum scale corrections, also known as the Rochester corrections, are available in the [MuonCorrectionsTool](https://github.com/cms-legacydata-analyses/MuonCorrectionsTool). The 2021 Open Data workshop included a [demonstration of the MuonCorrectionsTool](https://cms-opendata-workshop.github.io/workshop2021-lesson-advobjects/02-muoncorr/index.html) for Run 1 data.
 
-The Muon Momentum Scale Corrections, also known as the Rochester Corrections, are available in the [MuonCorrectionsTool](https://github.com/cms-legacydata-analyses/MuonCorrectionsTool).
-
-=== "Run 1 Data"
-
-    This tool was prepared for Run 1 data, and can be run using ROOT `TTree` files that have been produced from AOD files, for instance by using the Physics Object Extractor Tool. The correction parameters have been extracted in a two step method. In the first step, initial corrections are obtained in bins of the charge of the muon and the η and ϕ coordinates of the muon track. The reconstruction bias in muon momentum depends on these variables. In the second step, the corrections are fine tuned using the mass of the Z boson. The corrections for data and Monte Carlo (MC) are different since the MC events start with no biases but they can be induced during the reconstruction. Corrections have been extracted for both data and MC events.
-
-    In the MuonCorrectionsTool, the Run1 Rochester Corrections are added to two datasets as an example: a 2012 dataset and a MC dataset. A plot is created to check that the corrections were applied correctly. Creating the plot requires selections and the produced dataset contains only a part of the initial dataset. These selections can be skipped when the plot is not needed and a corrected version of the whole dataset is wanted as a result. Below you can find instructions on how to run the example code, how to apply the corrections to a different dataset and how to apply the corrections when you don't want to create the plot/make the selections. The official code for the Rochester Corrections can be found in the `RochesterCorrections` directory. The example code for applying the corrections is in the `Test` directory.
-
-    !!! Warning
-    	The following example does not need the CMSSW environment but it requires ROOT. This code was written using the ROOT version 6.22.08. If you are using an older version, you might get errors running the code. In this case, try using `rochcor2012wasym_old.h` instead of `rochcor2012wasym.h`. You can do this by changing the first line of `rochcor2012wasym.cc` to `#include "rochcor2012wasym_old.h"`.
-
-    **Applying the corrections to data and MC**: In the `Test` directory you can find `Analysis.C`, which is the example code for adding the corrections. The main function of `Analysis.C` is simply used for calling the `applyCorrections` function which takes as a parameter the name of the ROOT file (without `.root`), the path to the ROOT file, the name of the `TTree`, a boolean value of whether the file contains data (`true`) or MC (`false`), and a boolean variable of whether you want to correct the whole dataset (`true`) or make the selections needed for the plot (`false`).
-
-    The `applyCorrections` function creates a `TTree` from the ROOT file contents. In an event loop, corrections are computed and the resulting corrected muon kinematic information is stored. The boolean variable `correctAll` is used here to determine whether to correct all muons in the dataset or to select events with muon pairs of opposite charges so that a Z boson mass peak plot can be created. The functions used to compute the Rochester correction, given a muon's four-vector information, can be found in `rochcor2012wasym.cc`.
-
-
-    **Running the code**:
-
-    1. Open an interactive ROOT session in your terminal:
-
-    ``` cpp
-    root
-    ```
-
-    2. Compile `muresolution.cc`, `rochcor2012wasym.cc` and `Analysis.C`
-
-    ``` cpp
-    .L RochesterCorrections/muresolution.cc++
-    .L RochesterCorrections/rochcor2012wasym.cc++
-    .L RochesterCorrections/Test/Analysis.C+
-    ```
-
-    3. Run the main function
-
-    ``` cpp
-    Analysis pf
-    pf.main()
-    ```
-
-    4. To create the plot, compile `Plot.C` and run the main function
-
-    ``` cpp
-    .L RochesterCorrections/Test/Plot.C+
-    main()
-    ```
-
-    **Applying the corrections to a different dataset**: You can use the example code to apply the corrections to different datasets. In `Test/Analysis.C`, edit the parameters of `applyCorrections` to pass the appropriate ROOT file and TTree information. Check whether the names and data types of the branches in your dataset match the existing content of `Analysis.C` -- if you are using a POET output file, or an AOD2NanoAODOutreachTool example file, this should be true! Adjust the branch names and data types if needed.
-
-=== "Run 2 Data"
-
-The MuonCorrectionsTool repository will be updated with new instructions and correction values for Run 2 data.
+!!! Note
+    We plan to update the MuonCorrectionsTool for Run 2 data.
