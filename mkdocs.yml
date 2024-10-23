@@ -45,36 +45,17 @@ nav:
                 - 'Jets': analysis/selection/objects/jets.md
                 - 'Missing ET': analysis/selection/objects/met.md
                 - 'Taus': analysis/selection/objects/taus.md
-            - 'ID Efficiency study':
-                - 'Tag and Probe': analysis/selection/idefficiencystudy/tagandprobe.md
-                - 'Signal extraction': analysis/selection/idefficiencystudy/signalextraction.md
-                - 'Tutorial':
-                    - 'Sideband Subtraction':    analysis/selection/idefficiencystudy/tutorial/03-sidebandsubtraction.md
-                    - 'Comparison':              analysis/selection/idefficiencystudy/tutorial/04-comparison.md
-                    - 'Systematic':              analysis/selection/idefficiencystudy/tutorial/05-systematic.md
-                - 'Reference Guide (SB)':
-                    - 'The Macro':                 analysis/selection/idefficiencystudy/sidebandreferenceguide/macro.md
-                    - 'FitFunction class':         analysis/selection/idefficiencystudy/sidebandreferenceguide/FitFunctions.md
-                    - 'SidebandSubtraction class': analysis/selection/idefficiencystudy/sidebandreferenceguide/SidebandSubtraction.md
-                    - 'InvariantMass class':       analysis/selection/idefficiencystudy/sidebandreferenceguide/InvariantMass.md
-                    - 'MassValues struct':         analysis/selection/idefficiencystudy/sidebandreferenceguide/MassValues.md
-                    - 'Type class':                analysis/selection/idefficiencystudy/sidebandreferenceguide/Type.md
-                    - 'TagProbe class':            analysis/selection/idefficiencystudy/sidebandreferenceguide/TagProbe.md
-                    - 'PtEtaPhi class':            analysis/selection/idefficiencystudy/sidebandreferenceguide/PtEtaPhi.md
-                    - 'PassingFailing class':      analysis/selection/idefficiencystudy/sidebandreferenceguide/PassingFailing.md
-                - 'Reference Guide (Fit)':
-                    - 'Overview':                  analysis/selection/idefficiencystudy/fittingreferenceguide/overview.md
-                    - 'Src files':                 analysis/selection/idefficiencystudy/fittingreferenceguide/src_files.md
+	    - 'Efficiency measurements': analysis/selection/idefficiencystudy/tagandprobe.md
         - 'Luminosity': analysis/lumi.md
         - 'Background Modelling': analysis/backgrounds.md
-        - 'Systematics':
-            - 'Luminosity Uncertainties': analysis/systematics/lumiuncertain.md
-            - 'MC Uncertainty': analysis/systematics/mcuncertain.md
-            - 'Physics Object Uncertainty':
-                 - 'Lepton/Photon uncertainties': analysis/systematics/objectsuncertain/leptonuncertain.md
-                 - 'Jet/MET uncertainties': analysis/systematics/objectsuncertain/jetmetuncertain.md
-                 - 'Tagging uncertainties': analysis/systematics/objectsuncertain/btaguncertain.md
-            - 'Pileup Uncertainty': analysis/systematics/pileupuncertain.md
+        - 'Corrections and Uncertainties':
+            - 'Luminosity uncertainties': analysis/systematics/lumiuncertain.md
+            - 'Pileup uncertainty': analysis/systematics/pileupuncertain.md
+            - 'Generator uncertainty': analysis/systematics/mcuncertain.md
+            - 'Physics Object Corrections':
+                 - 'Lepton/Photon corrections': analysis/systematics/objectsuncertain/leptonuncertain.md
+                 - 'Jet/MET corrections': analysis/systematics/objectsuncertain/jetmetuncertain.md
+                 - 'Jet tagging corrections': analysis/systematics/objectsuncertain/btaguncertain.md
         - 'Statistical Interpretation': analysis/stats.md  
     - FAQ: faq.md
     - About: about.md
