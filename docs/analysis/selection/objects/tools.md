@@ -71,7 +71,6 @@ Many of the most important kinematic quantities defining a physics object are ac
 
     Here, `OBJECT` can be `Muon`, `Electron`, `Jet`, etc.
 
-
 ## Track access functions
 
 Many objects are also connected to tracks from the CMS tracking detectors. Information from

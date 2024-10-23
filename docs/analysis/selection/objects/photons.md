@@ -81,7 +81,6 @@ Photons are measured in the CMS experiment in the [electromagnetic calorimeter](
 
     In NanoAOD, the photon four-vector information is stored in branches called: `Photon_pt`, `Photon_eta`, and `Photon_phi`, with the mass assumed to be zero.
 
-
 ## Photon identification
 
 As explained in the [Physics Object page](../objects#detector-information-for-identification), a mandatory task in the physics analysis is to identify photons, i.e. to separate “real” objects from “fakes”. A large fraction of the energy deposited in the detector by all proton-proton interactions arises from photons originating in the decay of neutral mesons, and these electromagnetic showers provide a substantial background to signal photons. The identification criteria depend on the type of analysis.

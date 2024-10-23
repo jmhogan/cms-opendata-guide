@@ -243,4 +243,3 @@ The selection is based on cuts on a small number of variables. Different thresho
 === "Run 2 Data (NanoAOD files)"
 
     The [2024 Open Data Workshop lesson on electrons](https://cms-opendata-workshop.github.io/workshop2024-lesson-physics-objects/instructor/02-electrons.html) details all of the relevant NanoAOD branches for electron identification and isolation selection.
-

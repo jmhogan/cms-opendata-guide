@@ -37,7 +37,7 @@ When studying electrons and muons, CMS has developed a tradition of using the fo
 
 **Electrons**:
 
- - $\epsilon_{\mathrm{reconstruction}}$: baseline selection includes electromagnetic calorimeter superclusters with $p_{T} > 10$ GeV and the [Gaussian Sum Filter electron reconstruction](https://twiki.cern.ch/twiki/bin/view/CMS/ElectronRecoPrinciples) is tested. 
+ - $\epsilon_{\mathrm{reconstruction}}$: baseline selection includes electromagnetic calorimeter superclusters with $p_{T} > 10$ GeV and the [Gaussian Sum Filter electron reconstruction](https://twiki.cern.ch/twiki/bin/view/CMS/ElectronRecoPrinciples) is tested.
  - $\epsilon_{\mathrm{identification}}$: baseline selection includes all reconstructed electrons and the identification criterion is tested.
  - $\epsilon_{\mathrm{isolation}}$: baseline selection includes all muons passing the desired identification criterion and the isolation criterion is tested.
  - $\epsilon_{\mathrm{trigger}}$: baseline selection includes all muons passing both the desired identification and isolation criteria and the trigger path criterion is tested.
@@ -65,7 +65,7 @@ The normalization $\alpha$ factor compares the expected quantity of background p
 
 The number of background events in the signal region can be computed in various ways. For very flat background spectra like those in the figure above, $\alpha$ could be a ratio of the width, in GeV, of the signal region compared to the combined sideband regions. A fit could also be performed to only data in the sideband regions, and propagated across the peak region. The integral of the function in the signal region would then provide the number of background events for computing $\alpha$. The uncertainty in $\alpha$ is the quadrature sum of the statistical uncertainties on the number of background events in the signal and sideband regions.
 
-After subtracting background events from the signal region, the efficiencies and scale factors are calculated by constructing the ratios in equations 1 and 2. 
+After subtracting background events from the signal region, the efficiencies and scale factors are calculated by constructing the ratios in equations 1 and 2.
 
 ### Fitting method
 
